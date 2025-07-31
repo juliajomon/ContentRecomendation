@@ -1,86 +1,144 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import RecommendationCard from '../components/RecommendationCard';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FiUser } from 'react-icons/fi';
+import RecommendationCard from './RecommendationCard';
+import './Dashboard.css';
 
-function DashboardPage() {
+const genreOptions = [
+  'Sci-Fi',
+  'Comedy',
+  'Fantasy',
+  'Drama',
+  'Horror',
+  'Thriller',
+  'Action',
+];
+
+const Dashboard = () => {
   const [recommendations, setRecommendations] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [selectedType, setSelectedType] = useState('');
+  const [selectedGenre, setSelectedGenre] = useState('');
+  const navigate = useNavigate();
 
-  const fetchRecommendations = async (category) => {
-    setLoading(true);
-    setError('');
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `http://localhost:8000/api/recommendations?category=${category}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
-      setRecommendations(response.data); 
-    } catch (error) {
-      console.error('Failed to fetch recommendations', error);
-      if (error.response?.status === 401) {
-        setError('Please login again to access recommendations.');
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-      } else {
-        setError('Failed to fetch recommendations. Please try again.');
-      }
-    } finally {
-      setLoading(false);
+  const handleLogout = () => {
+    localStorage.clear(); 
+    navigate('/login'); 
+  };
+
+  const fetchRecommendations = () => {
+    let dummyData = [];
+    switch (selectedType) {
+      case 'books':
+        dummyData = [
+          { id: 1, title: 'Dune', type: 'Sci-Fi' },
+          { id: 2, title: 'The Hobbit', type: 'Fantasy' },
+          { id: 3, title: 'Gone Girl', type: 'Thriller' },
+          { id: 4, title: 'The Shining', type: 'Horror' },
+        ];
+        break;
+      case 'movies':
+        dummyData = [
+          { id: 5, title: 'Inception', type: 'Sci-Fi' },
+          { id: 6, title: 'The Godfather', type: 'Drama' },
+          { id: 7, title: 'Interstellar', type: 'Sci-Fi' },
+          { id: 8, title: 'The Conjuring', type: 'Horror' },
+        ];
+        break;
+      case 'tv':
+        dummyData = [
+          { id: 9, title: 'Stranger Things', type: 'Fantasy' },
+          { id: 10, title: 'Breaking Bad', type: 'Drama' },
+          { id: 11, title: 'The Boys', type: 'Action' },
+        ];
+        break;
+      case 'podcast':
+        dummyData = [
+          { id: 12, title: 'Lore', type: 'Horror' },
+          { id: 13, title: 'Serial', type: 'Thriller' },
+          { id: 14, title: 'Science Vs', type: 'Sci-Fi' },
+        ];
+        break;
+      default:
+        dummyData = [];
     }
+
+    const filtered = selectedGenre
+      ? dummyData.filter((item) => item.type === selectedGenre)
+      : dummyData;
+
+    setRecommendations(filtered);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">Your Dashboard</h1>
-        <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">What's next?</h2>
-        
-        <div className="flex justify-center gap-4 mb-8">
-          <button 
-            onClick={() => fetchRecommendations('books')}
-            disabled={loading}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
+    <div className="dashboard-container">
+      {/* Top Left - Logout */}
+      <button className="logout-button" onClick={handleLogout}>
+        Logout
+      </button>
+
+      {/* Top Right - Profile Icon */}
+      <button
+        onClick={() => navigate('/profile')}
+        title="Go to Profile"
+        className="profile-button"
+      >
+        <FiUser />
+      </button>
+
+      <div className="dashboard-title-section">
+        <h1 className="dashboard-title">Your Dashboard</h1>
+        <p className="dashboard-subtitle">What’s next? Choose a category.</p>
+      </div>
+
+      <div className="category-buttons">
+        {['tv', 'books', 'movies', 'podcast'].map((type) => (
+          <button
+            key={type}
+            className={`dashboard-button ${selectedType === type ? 'selected' : ''}`}
+            onClick={() => {
+              setSelectedType(type);
+              setRecommendations([]);
+              setSelectedGenre('');
+            }}
           >
-            {loading ? 'Loading...' : 'Get Book Recommendations'}
+            {type.charAt(0).toUpperCase() + type.slice(1)}
           </button>
-          <button 
-            onClick={() => fetchRecommendations('movies')}
-            disabled={loading}
-            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400 transition-colors"
-          >
-            {loading ? 'Loading...' : 'Get Movie Recommendations'}
-          </button>
-        </div>
+        ))}
+      </div>
 
-        {error && (
-          <div className="text-red-500 text-center mb-4">{error}</div>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recommendations.map((item) => (
-            <RecommendationCard
-              key={item.id}
-              title={item.title}
-              type={item.genre}
-              imageUrl={item.imageUrl}
-            />
-          ))}
-        </div>
-
-        {recommendations.length === 0 && !loading && !error && (
-          <div className="text-center text-gray-500 mt-8">
-            Click a button above to get recommendations
+      {selectedType && (
+        <div className="genre-section">
+          <h3>Select a Genre:</h3>
+          <div className="genre-buttons">
+            {genreOptions.map((genre) => (
+              <button
+                key={genre}
+                className={`genre-button ${selectedGenre === genre ? 'selected' : ''}`}
+                onClick={() => setSelectedGenre((prev) => (prev === genre ? '' : genre))}
+              >
+                {genre}
+              </button>
+            ))}
           </div>
+          <div className="recommend-button-wrapper">
+            <button className="recommend-button" onClick={fetchRecommendations}>
+              Recommend
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="recommendations-grid">
+        {recommendations.length === 0 ? (
+          <p className="no-recommendation">No recommendations found.</p>
+        ) : (
+          recommendations.map((item) => (
+            <RecommendationCard key={item.id} title={item.title} type={item.type} />
+          ))
         )}
       </div>
     </div>
   );
-}
+};
 
-export default DashboardPage;
+export default Dashboard;
