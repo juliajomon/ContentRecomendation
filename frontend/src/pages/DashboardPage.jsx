@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiUser } from 'react-icons/fi';
-import './Dashboard.css'; // 👈 Link to the new CSS file
+import './Dashboard.css'; 
 
 const RecommendationCard = ({ title, type, imageUrl }) => (
   <div className="recommendation-card">
