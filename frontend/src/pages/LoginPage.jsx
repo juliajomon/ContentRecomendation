@@ -1,92 +1,80 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import './LoginPage.css';
 
-const LoginPage = () => {
+function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    setError('');
-    setIsSubmitting(true);
 
-    try {
-      const response = await axios.post('http://localhost:8000/api/auth/login', {
-        email,
-        password,
-      });
-
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+    // No verification — just redirect
+    localStorage.setItem('token', 'dummy-token');
+    
+    // Check if user has completed onboarding
+    const onboardingComplete = localStorage.getItem('onboardingComplete');
+    
+    if (onboardingComplete === 'true') {
       navigate('/dashboard');
-    } catch (err) {
-      setError(err.response?.data || 'Login failed. Please check your credentials.');
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      navigate('/onboarding');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-100 to-blue-50 px-4">
-      <div className="w-full max-w-md p-8 space-y-4 bg-white rounded-2xl shadow-md">
-        <form onSubmit={handleLogin} className="space-y-4 w-full">
-          {/* Heading */}
-          <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
+    <div className="login-page">
+      <div className="login-container">
+        <div className="login-content">
+          <h1 className="login-title">Welcome Back</h1>
+          <p className="login-subtitle">Sign in to your account</p>
 
-          {/* Error Message */}
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          <form className="login-form" onSubmit={handleLogin}>
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">Email</label>
+              <input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="form-input"
+              />
+            </div>
 
-          {/* Email Field */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-600">Email</label>
-            <input
-              type="email"
-              className="w-full p-3 mt-1 bg-gray-100 rounded-lg focus:outline-none"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">Password</label>
+              <input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="form-input"
+              />
+            </div>
 
-          {/* Password Field */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-600">Password</label>
-            <input
-              type="password"
-              className="w-full p-3 mt-1 bg-gray-100 rounded-lg focus:outline-none"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+            <button
+              type="submit"
+              className="submit-btn"
+            >
+              Sign In
+            </button>
 
-          {/* Login Button */}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-3 font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
-          >
-            {isSubmitting ? 'Logging in...' : 'Login'}
-          </button>
-
-          {/* Footer Link */}
-          <p className="text-sm text-center pt-2">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-blue-600 font-semibold hover:underline">
-              Register here
-            </Link>
-          </p>
-        </form>
+            <p className="register-link">
+              Don't have an account?{' '}
+              <Link to="/register" className="link">
+                Create one
+              </Link>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );
-};
+}
 
 export default LoginPage;

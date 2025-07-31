@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './RegisterPage.css';
 
 const RegisterPage = () => {
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -19,98 +20,103 @@ const RegisterPage = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post(
-        'http://localhost:8000/api/auth/register',
-        {
-          username,
-          email,
-          password,
+      const response = await axios.post('http://localhost:8080/api/auth/register', {
+        name: name,
+        email: email,
+        password: password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
         }
-      );
+      });
 
       setSuccessMessage('Successfully registered!');
-      setUsername('');
+      setName('');
       setEmail('');
       setPassword('');
 
       setTimeout(() => {
-        navigate('/login');
+        navigate('/onboarding');
       }, 2000);
     } catch (err) {
-      setError(err.response?.data || 'Registration failed. Please try again.');
+      console.error('Registration error:', err);
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-100 to-blue-50 px-4">
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md space-y-4">
-        <form className="w-full space-y-4" onSubmit={handleRegister}>
-          <h2 className="text-2xl font-bold text-center">Create an Account</h2>
+    <div className="register-page">
+      <div className="register-container">
+        <div className="register-content">
+          <h1 className="register-title">Create Account</h1>
+          <p className="register-subtitle">Join us today</p>
 
-          {successMessage && (
-            <p className="text-green-600 text-center font-medium">{successMessage}</p>
-          )}
+          <form className="register-form" onSubmit={handleRegister}>
+            {successMessage && (
+              <div className="message success-message">{successMessage}</div>
+            )}
 
-          {error && (
-            <p className="text-red-500 text-center font-medium">{error}</p>
-          )}
+            {error && (
+              <div className="message error-message">{error}</div>
+            )}
 
-          <div>
-            <label htmlFor="username" className="block mb-1 font-medium">Username</label>
-            <input
-              id="username"
-              type="text"
-              placeholder="Your Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className="w-full px-4 py-2 border rounded-lg bg-gray-100 outline-none focus:ring-2 focus:ring-blue-300"
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="name" className="form-label">Name</label>
+              <input
+                id="name"
+                type="text"
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="form-input"
+              />
+            </div>
 
-          <div>
-            <label htmlFor="email" className="block mb-1 font-medium">Email</label>
-            <input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-2 border rounded-lg bg-gray-100 outline-none focus:ring-2 focus:ring-blue-300"
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">Email</label>
+              <input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="form-input"
+              />
+            </div>
 
-          <div>
-            <label htmlFor="password" className="block mb-1 font-medium">Password</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2 border rounded-lg bg-gray-100 outline-none focus:ring-2 focus:ring-blue-300"
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">Password</label>
+              <input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="form-input"
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg shadow-md transition"
-          >
-            {isSubmitting ? 'Registering...' : 'Register'}
-          </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="submit-btn"
+            >
+              {isSubmitting ? 'Creating Account...' : 'Create Account'}
+            </button>
 
-          <p className="text-sm text-center pt-2">
-            Already have an account?{' '}
-            <Link to="/login" className="text-blue-600 font-semibold hover:underline">
-              Login here
-            </Link>
-          </p>
-        </form>
+            <p className="login-link">
+              Already have an account?{' '}
+              <Link to="/login" className="link">
+                Sign in
+              </Link>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );

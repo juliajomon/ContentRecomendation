@@ -1,15 +1,5 @@
 {
-  "name": "content-recommendation",
-  "version": "1.0.0",
-  "description": "Content Recommendation Application",
-  "scripts": {
-    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
-    "start:backend": "cd backend && ./mvnw spring-boot:run",
-    "start:frontend": "cd frontend && npm run dev",
-    "install:all": "npm install && cd frontend && npm install",
-    "build": "cd frontend && npm run build"
-  },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
+  "dependencies": {
+    "react-router-dom": "^7.7.1"
   }
-} 
+}
