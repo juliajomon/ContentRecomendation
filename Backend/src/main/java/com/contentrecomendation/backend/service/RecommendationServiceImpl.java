@@ -17,6 +17,8 @@ public class RecommendationServiceImpl implements RecommendationService {
     @Autowired
     private RecommendationRepository recommendationRepository;
 
+
+
     @Override
     public List<Recommendation> getRecommendationsForUser(Long userId) {
         List<Interest> userInterests = interestRepository.findByUserId(userId);

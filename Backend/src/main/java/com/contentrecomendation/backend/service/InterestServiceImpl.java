@@ -34,4 +34,10 @@ public class InterestServiceImpl implements InterestService {
         return interestRepo.findByUserId(userId);
     }
 
+    @Override
+    public void deleteInterest(Long id) {
+        interestRepo.deleteById(id);
+    }
+
+
 }

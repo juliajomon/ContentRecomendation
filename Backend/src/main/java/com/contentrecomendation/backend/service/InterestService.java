@@ -11,4 +11,6 @@ public interface InterestService {
     Interest saveInterest(Interest interest);
 
     List<Interest> getInterestsByUserId(Long userId);
+
+    void deleteInterest(Long id);
 }
