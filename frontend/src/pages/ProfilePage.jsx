@@ -1,20 +1,15 @@
-// src/pages/ProfilePage.jsx
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function ProfilePage() {
-  // Example genres - you should fetch these from your API
   const availableGenres = ['Sci-Fi', 'Fantasy', 'Drama', 'Comedy', 'Thriller'];
   const [selectedGenres, setSelectedGenres] = useState([]);
-
-  // In a real app, you would fetch the user's currently saved genres
-  // useEffect(() => { fetchUserGenres(); }, []);
 
   const handleGenreChange = (genre) => {
     setSelectedGenres((prevGenres) =>
       prevGenres.includes(genre)
-        ? prevGenres.filter((g) => g !== genre) // Uncheck
-        : [...prevGenres, genre] // Check
+        ? prevGenres.filter((g) => g !== genre)
+        : [...prevGenres, genre]
     );
   };
 
