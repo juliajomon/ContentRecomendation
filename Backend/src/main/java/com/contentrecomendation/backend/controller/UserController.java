@@ -23,9 +23,9 @@ public class UserController {
             User newUser = userService.registerUser(user);
             return ResponseEntity.ok(newUser);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Registration failed due to server error.");
+            return ResponseEntity.status(500).body(Map.of("message", "Registration failed due to server error: " + e.getMessage()));
         }
     }
 

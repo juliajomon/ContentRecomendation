@@ -20,8 +20,8 @@ const RegisterPage = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/register', {
-        name: name,
+      const response = await axios.post('http://localhost:8000/api/auth/register', {
+        username: name,
         email: email,
         password: password
       }, {
@@ -40,7 +40,15 @@ const RegisterPage = () => {
       }, 2000);
     } catch (err) {
       console.error('Registration error:', err);
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else if (err.response?.data?.errors) {
+        // Handle validation errors
+        const errorMessages = Object.values(err.response.data.errors).join(', ');
+        setError(errorMessages);
+      } else {
+        setError('Registration failed. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
