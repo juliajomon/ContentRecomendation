@@ -1,0 +1,119 @@
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+const RegisterPage = () => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccessMessage('');
+    setIsSubmitting(true);
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/register`,
+        {
+          username,
+          email,
+          password,
+        }
+      );
+
+      setSuccessMessage('Successfully registered!');
+      setUsername('');
+      setEmail('');
+      setPassword('');
+
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    } catch (err) {
+      setError(err.response?.data || 'Registration failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-100 to-blue-50 px-4">
+      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md space-y-4">
+        <form className="w-full space-y-4" onSubmit={handleRegister}>
+          <h2 className="text-2xl font-bold text-center">Create an Account</h2>
+
+          {successMessage && (
+            <p className="text-green-600 text-center font-medium">{successMessage}</p>
+          )}
+
+          {error && (
+            <p className="text-red-500 text-center font-medium">{error}</p>
+          )}
+
+          <div>
+            <label htmlFor="username" className="block mb-1 font-medium">Username</label>
+            <input
+              id="username"
+              type="text"
+              placeholder="Your Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              className="w-full px-4 py-2 border rounded-lg bg-gray-100 outline-none focus:ring-2 focus:ring-blue-300"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="email" className="block mb-1 font-medium">Email</label>
+            <input
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-2 border rounded-lg bg-gray-100 outline-none focus:ring-2 focus:ring-blue-300"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block mb-1 font-medium">Password</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-2 border rounded-lg bg-gray-100 outline-none focus:ring-2 focus:ring-blue-300"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg shadow-md transition"
+          >
+            {isSubmitting ? 'Registering...' : 'Register'}
+          </button>
+
+          <p className="text-sm text-center pt-2">
+            Already have an account?{' '}
+            <Link to="/login" className="text-blue-600 font-semibold hover:underline">
+              Login here
+            </Link>
+          </p>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default RegisterPage;
