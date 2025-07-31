@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const RegisterPage = () => {
-  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -11,7 +11,6 @@ const RegisterPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -20,14 +19,14 @@ const RegisterPage = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post(`${API_URL}/api/auth/register`, {
-        name,
+      const response = await axios.post('http://localhost:8000/api/auth/register', {
+        username,
         email,
         password,
       });
 
       setSuccessMessage('Successfully registered!');
-      setName('');
+      setUsername('');
       setEmail('');
       setPassword('');
 
@@ -35,7 +34,7 @@ const RegisterPage = () => {
         navigate('/login');
       }, 2000);
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      setError(err.response?.data || 'Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -45,29 +44,34 @@ const RegisterPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-100 to-blue-50 px-4">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md space-y-4">
         <form className="w-full space-y-4" onSubmit={handleRegister}>
+          {/* Heading */}
           <h2 className="text-2xl font-bold text-center">Create an Account</h2>
 
+          {/* Success Message */}
           {successMessage && (
             <p className="text-green-600 text-center font-medium">{successMessage}</p>
           )}
 
+          {/* Error Message */}
           {error && (
             <p className="text-red-500 text-center font-medium">{error}</p>
           )}
 
+          {/* Username */}
           <div>
-            <label htmlFor="name" className="block mb-1 font-medium">Name</label>
+            <label htmlFor="username" className="block mb-1 font-medium">Username</label>
             <input
-              id="name"
+              id="username"
               type="text"
-              placeholder="Your Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              placeholder="Your Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
               className="w-full px-4 py-2 border rounded-lg bg-gray-100 outline-none focus:ring-2 focus:ring-blue-300"
             />
           </div>
 
+          {/* Email */}
           <div>
             <label htmlFor="email" className="block mb-1 font-medium">Email</label>
             <input
@@ -81,6 +85,7 @@ const RegisterPage = () => {
             />
           </div>
 
+          {/* Password */}
           <div>
             <label htmlFor="password" className="block mb-1 font-medium">Password</label>
             <input
@@ -94,6 +99,7 @@ const RegisterPage = () => {
             />
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
             disabled={isSubmitting}
@@ -102,6 +108,7 @@ const RegisterPage = () => {
             {isSubmitting ? 'Registering...' : 'Register'}
           </button>
 
+          {/* Already have account */}
           <p className="text-sm text-center pt-2">
             Already have an account?{' '}
             <Link to="/login" className="text-blue-600 font-semibold hover:underline">
