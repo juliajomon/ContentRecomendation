@@ -1,10 +1,10 @@
-package com.backend.ContentRecomendation;
+package com.contentrecomendation.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ContentRecomendationApplicationTests {
+class BackendApplicationTests {
 
 	@Test
 	void contextLoads() {
