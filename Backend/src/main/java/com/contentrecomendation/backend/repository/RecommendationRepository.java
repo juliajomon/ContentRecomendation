@@ -11,4 +11,8 @@ public interface RecommendationRepository extends JpaRepository<Recommendation, 
     List<Recommendation> findByCategoryIn(List<String> interestNames);
     
     List<Recommendation> findByCategory(String category);
+    
+    List<Recommendation> findByGenre(String genre);
+    
+    List<Recommendation> findByCategoryAndGenre(String category, String genre);
 }

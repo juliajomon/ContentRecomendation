@@ -8,4 +8,6 @@ public interface RecommendationService {
 
     List<Recommendation> getRecommendationsForUser(Long userId);
     List<Recommendation> getRecommendationsByCategory(String category);
+    List<Recommendation> getRecommendationsByGenre(String genre);
+    List<Recommendation> getRecommendationsByCategoryAndGenre(String category, String genre);
 }

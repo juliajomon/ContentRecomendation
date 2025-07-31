@@ -36,5 +36,15 @@ public class RecommendationServiceImpl implements RecommendationService {
     public List<Recommendation> getRecommendationsByCategory(String category) {
         return recommendationRepository.findByCategory(category);
     }
+
+    @Override
+    public List<Recommendation> getRecommendationsByGenre(String genre) {
+        return recommendationRepository.findByGenre(genre);
+    }
+
+    @Override
+    public List<Recommendation> getRecommendationsByCategoryAndGenre(String category, String genre) {
+        return recommendationRepository.findByCategoryAndGenre(category, genre);
+    }
 }
 

@@ -3,8 +3,13 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-}
 
+  background-image: url("/bg.png"); /* if image is in public folder */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

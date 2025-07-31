@@ -1,4 +1,4 @@
-package com.contentrecommendation.backend.config;
+package com.contentrecomendation.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

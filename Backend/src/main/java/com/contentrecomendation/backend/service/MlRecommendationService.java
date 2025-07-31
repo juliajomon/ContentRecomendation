@@ -1,4 +1,4 @@
-package com.contentrecommendation.backend.service; // Keep it in the 'service' package
+package com.contentrecomendation.backend.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -11,31 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-// This DTO is specifically for sending data to the Python ML service.
-// Make sure its fields match what the Python Flask app expects in its JSON request body.
-// You can define this as a static nested class or in its own file if preferred.
-// For simplicity in a hackathon, keeping it here is fine.
-public static class UserInterestDto { // Made public static
-    public String category;
-    public String genre;
-
-    // Constructor
-    public UserInterestDto(String category, String genre) {
-        this.category = category;
-        this.genre = genre;
-    }
-
-    // Getters (required for JSON serialization by Spring/Jackson)
-    public String getCategory() { return category; }
-    public String getGenre() { return genre; }
-
-    // You might also need a no-arg constructor if Spring needs to deserialize it from JSON
-    public UserInterestDto() {}
-}
-
-
-@Service // Marks this as a Spring service component
-public class MlRecommendationService { // Renamed the class
+@Service
+public class MlRecommendationService {
 
     private final RestTemplate restTemplate;
 
@@ -54,7 +31,7 @@ public class MlRecommendationService { // Renamed the class
      * @param categoryFilter An optional filter for the recommendation category (e.g., "Movies").
      * @return A list of recommended items as Maps (JSON-like objects from Python).
      */
-    public List<Map<String, Object>> getMlRecommendations(List<UserInterestDto> userInterests, String categoryFilter) {
+    public List<Map<String, Object>> getMlRecommendations(List<Map<String, String>> userInterests, String categoryFilter) {
         // Prepare the request body for the Python service
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("userInterests", userInterests);
