@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const RegisterPage = () => {
-  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -19,18 +19,14 @@ const RegisterPage = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/register', {
-        name: name,
-        email: email,
-        password: password
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      const response = await axios.post('http://localhost:8000/api/auth/register', {
+        username,
+        email,
+        password,
       });
 
       setSuccessMessage('Successfully registered!');
-      setName('');
+      setUsername('');
       setEmail('');
       setPassword('');
 
@@ -38,8 +34,7 @@ const RegisterPage = () => {
         navigate('/login');
       }, 2000);
     } catch (err) {
-      console.error('Registration error:', err);
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      setError(err.response?.data || 'Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -62,15 +57,15 @@ const RegisterPage = () => {
             <p className="text-red-500 text-center font-medium">{error}</p>
           )}
 
-          {/* Name */}
+          {/* Username */}
           <div>
-            <label htmlFor="name" className="block mb-1 font-medium">Name</label>
+            <label htmlFor="username" className="block mb-1 font-medium">Username</label>
             <input
-              id="name"
+              id="username"
               type="text"
-              placeholder="Your Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              placeholder="Your Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
               className="w-full px-4 py-2 border rounded-lg bg-gray-100 outline-none focus:ring-2 focus:ring-blue-300"
             />
