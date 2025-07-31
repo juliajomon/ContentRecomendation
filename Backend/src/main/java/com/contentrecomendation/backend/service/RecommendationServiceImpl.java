@@ -17,8 +17,6 @@ public class RecommendationServiceImpl implements RecommendationService {
     @Autowired
     private RecommendationRepository recommendationRepository;
 
-
-
     @Override
     public List<Recommendation> getRecommendationsForUser(Long userId) {
         List<Interest> userInterests = interestRepository.findByUserId(userId);
@@ -32,6 +30,11 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .toList();
 
         return recommendationRepository.findByCategoryIn(interestNames);
+    }
+
+    @Override
+    public List<Recommendation> getRecommendationsByCategory(String category) {
+        return recommendationRepository.findByCategory(category);
     }
 }
 

@@ -5,6 +5,7 @@ import com.contentrecomendation.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,4 +23,20 @@ public class UserServiceImpl implements UserService {
         return userRepo.findByEmail(email);
     }
 
+    @Override
+    public User loginUser(String email, String password) {
+        Optional<User> userOpt = userRepo.findByEmail(email);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (user.getPassword().equals(password)) {
+                return user;
+            }
+        }
+        throw new IllegalArgumentException("Invalid email or password");
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
 }

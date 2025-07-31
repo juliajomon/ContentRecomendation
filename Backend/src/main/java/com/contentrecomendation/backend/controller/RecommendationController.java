@@ -15,6 +15,11 @@ public class RecommendationController {
     @Autowired
     private RecommendationService recommendationService;
 
+    @GetMapping
+    public ResponseEntity<List<Recommendation>> getRecommendationsByCategory(@RequestParam String category) {
+        return ResponseEntity.ok(recommendationService.getRecommendationsByCategory(category));
+    }
+
     @GetMapping("/{userId}")
     public ResponseEntity<List<Recommendation>> getRecommendations(@PathVariable Long userId) {
         return ResponseEntity.ok(recommendationService.getRecommendationsForUser(userId));

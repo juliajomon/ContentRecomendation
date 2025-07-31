@@ -20,11 +20,12 @@ function LoginPage() {
         password,
       });
 
-      localStorage.setItem('token', response.data.token);
+      // Store user data instead of token
+      localStorage.setItem('user', JSON.stringify(response.data));
       navigate('/dashboard');
     } catch (err) {
       console.error('Login failed:', err);
-      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+      setError(err.response?.data || 'Login failed. Please check your credentials.');
     } finally {
       setIsLoading(false);
     }

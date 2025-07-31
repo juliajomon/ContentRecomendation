@@ -9,4 +9,6 @@ public interface RecommendationRepository extends JpaRepository<Recommendation, 
     List<Recommendation> findByUserId(Long userId);
 
     List<Recommendation> findByCategoryIn(List<String> interestNames);
+    
+    List<Recommendation> findByCategory(String category);
 }
