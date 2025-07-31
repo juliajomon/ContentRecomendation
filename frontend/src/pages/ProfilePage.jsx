@@ -7,6 +7,7 @@ function ProfilePage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,7 +38,12 @@ function ProfilePage() {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      alert('Profile updated!');
+      setSuccessMessage('Profile updated successfully ✅');
+      setPassword(''); // clear password field
+
+      // Auto-clear message after 3 seconds
+      setTimeout(() => setSuccessMessage(''), 3000);
+
     } catch (error) {
       console.error('Error updating profile:', error);
     }
@@ -78,6 +84,10 @@ function ProfilePage() {
       </button>
 
       <h2>Update Profile</h2>
+
+      {successMessage && (
+        <p className="success-message">{successMessage}</p>
+      )}
 
       <div className="form-group">
         <label>Name:</label>
