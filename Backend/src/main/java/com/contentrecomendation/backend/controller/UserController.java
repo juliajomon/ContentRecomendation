@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -30,8 +31,8 @@ public class UserController {
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody User user) {
         try {
-            User loggedInUser = userService.loginUser(user.getEmail(), user.getPassword());
-            return ResponseEntity.ok(loggedInUser);
+            Map<String, Object> loginResponse = userService.loginUser(user.getEmail(), user.getPassword());
+            return ResponseEntity.ok(loginResponse);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

@@ -19,7 +19,7 @@ public class User {
     private List<Interest> interests = new ArrayList<>();
 
     public User() {
-        // Default constructor required by JPA
+
     }
 
     public User(Long userId) {
@@ -32,7 +32,7 @@ public class User {
         this.password = password;
     }
 
-    // Getters and Setters
+
 
     public Long getId() {
         return id;

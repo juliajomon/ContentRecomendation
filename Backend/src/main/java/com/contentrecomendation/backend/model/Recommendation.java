@@ -13,7 +13,7 @@ public class Recommendation {
     private String title;
     private String category;
     private String genre;
-    private String suggestionType; // read/watch/etc.
+    private String suggestionType;
 
     @ManyToOne
     private User user;

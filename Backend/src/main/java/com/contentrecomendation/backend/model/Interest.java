@@ -6,14 +6,14 @@ import jakarta.persistence.*;
 public class Interest {
 
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY) // Recommended to specify strategy
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
         private String category;
         private String genre;
 
         @ManyToOne
-        @JoinColumn(name = "user_id") // Foreign key in Interest table
+        @JoinColumn(name = "user_id")
         private User user;
 
         // Constructors
