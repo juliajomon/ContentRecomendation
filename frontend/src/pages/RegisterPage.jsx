@@ -30,7 +30,6 @@ const RegisterPage = () => {
       setEmail('');
       setPassword('');
 
-      // Optional: redirect after delay
       setTimeout(() => {
         navigate('/login');
       }, 2000);
