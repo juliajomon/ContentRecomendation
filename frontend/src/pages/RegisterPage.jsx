@@ -11,6 +11,7 @@ const RegisterPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -19,7 +20,7 @@ const RegisterPage = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post('http://localhost:8000/api/auth/register', {
+      const response = await axios.post(`${API_URL}/api/auth/register`, {
         name,
         email,
         password,
@@ -44,20 +45,16 @@ const RegisterPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-100 to-blue-50 px-4">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md space-y-4">
         <form className="w-full space-y-4" onSubmit={handleRegister}>
-          {/* Heading */}
           <h2 className="text-2xl font-bold text-center">Create an Account</h2>
 
-          {/* Success Message */}
           {successMessage && (
             <p className="text-green-600 text-center font-medium">{successMessage}</p>
           )}
 
-          {/* Error Message */}
           {error && (
             <p className="text-red-500 text-center font-medium">{error}</p>
           )}
 
-          {/* Name */}
           <div>
             <label htmlFor="name" className="block mb-1 font-medium">Name</label>
             <input
@@ -71,7 +68,6 @@ const RegisterPage = () => {
             />
           </div>
 
-          {/* Email */}
           <div>
             <label htmlFor="email" className="block mb-1 font-medium">Email</label>
             <input
@@ -85,7 +81,6 @@ const RegisterPage = () => {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label htmlFor="password" className="block mb-1 font-medium">Password</label>
             <input
@@ -99,7 +94,6 @@ const RegisterPage = () => {
             />
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={isSubmitting}
@@ -108,7 +102,6 @@ const RegisterPage = () => {
             {isSubmitting ? 'Registering...' : 'Register'}
           </button>
 
-          {/* Already have account */}
           <p className="text-sm text-center pt-2">
             Already have an account?{' '}
             <Link to="/login" className="text-blue-600 font-semibold hover:underline">
