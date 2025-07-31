@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60; // 5 hours
+    private static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
     private final SecretKey secret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     public String extractUsername(String token) {

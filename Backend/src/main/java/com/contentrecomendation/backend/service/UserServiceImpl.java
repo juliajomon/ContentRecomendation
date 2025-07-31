@@ -63,4 +63,44 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }
+
+    @Override
+    public User getUserFromToken(String token) {
+        String username = jwtUtil.extractUsername(token);
+        Optional<User> userOpt = userRepo.findByUsername(username);
+        if (userOpt.isPresent()) {
+            return userOpt.get();
+        }
+        throw new IllegalArgumentException("Invalid token");
+    }
+
+    @Override
+    public User updateUserProfile(Long userId, String name, String email, String password) {
+        Optional<User> userOpt = userRepo.findById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            
+            if (name != null && !name.trim().isEmpty()) {
+                user.setUsername(name);
+            }
+            if (email != null && !email.trim().isEmpty()) {
+                user.setEmail(email);
+            }
+            if (password != null && !password.trim().isEmpty()) {
+                user.setPassword(passwordEncoder.encode(password));
+            }
+            
+            return userRepo.save(user);
+        }
+        throw new IllegalArgumentException("User not found");
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        if (userRepo.existsById(userId)) {
+            userRepo.deleteById(userId);
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
+    }
 }

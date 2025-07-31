@@ -11,4 +11,7 @@ public interface UserService {
     Optional<User> getUserByEmail(String email);
     Map<String, Object> loginUser(String email, String password);
     List<User> getAllUsers();
+    User getUserFromToken(String token);
+    User updateUserProfile(Long userId, String name, String email, String password);
+    void deleteUser(Long userId);
 }
