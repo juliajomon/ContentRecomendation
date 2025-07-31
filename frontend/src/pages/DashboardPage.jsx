@@ -1,4 +1,3 @@
-// src/pages/DashboardPage.jsx
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import RecommendationCard from '../components/RecommendationCard';
