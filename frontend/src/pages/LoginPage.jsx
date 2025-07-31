@@ -1,25 +1,47 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 import './LoginPage.css';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
 
-    // No verification — just redirect
-    localStorage.setItem('token', 'dummy-token');
-    
-    // Check if user has completed onboarding
-    const onboardingComplete = localStorage.getItem('onboardingComplete');
-    
-    if (onboardingComplete === 'true') {
-      navigate('/dashboard');
-    } else {
-      navigate('/onboarding');
+    try {
+      const response = await axios.post('http://localhost:8000/api/auth/login', {
+        email: email,
+        password: password
+      });
+
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      
+      // Check if user has completed onboarding
+      const onboardingComplete = localStorage.getItem('onboardingComplete');
+      
+      if (onboardingComplete === 'true') {
+        navigate('/dashboard');
+      } else {
+        navigate('/onboarding');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      if (error.response?.data) {
+        setError(error.response.data);
+      } else {
+        setError('Login failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,11 +79,18 @@ function LoginPage() {
               />
             </div>
 
+            {error && (
+              <div className="error-message">
+                {error}
+              </div>
+            )}
+
             <button
               type="submit"
               className="submit-btn"
+              disabled={loading}
             >
-              Sign In
+              {loading ? 'Signing In...' : 'Sign In'}
             </button>
 
             <p className="register-link">
