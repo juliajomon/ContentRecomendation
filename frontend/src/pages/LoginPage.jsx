@@ -9,23 +9,24 @@ function LoginPage() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:8000/api/auth/login', {
+      const response = await axios.post(`${API_URL}/api/auth/login`, {
         email,
         password,
       });
 
-      // Store user data instead of token
-      localStorage.setItem('user', JSON.stringify(response.data));
+      localStorage.setItem('token', response.data.token);
       navigate('/dashboard');
     } catch (err) {
       console.error('Login failed:', err);
-      setError(err.response?.data || 'Login failed. Please check your credentials.');
+      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
     } finally {
       setIsLoading(false);
     }
@@ -35,13 +36,10 @@ function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-100 to-blue-50 px-4">
       <div className="w-full max-w-md p-8 space-y-4 bg-white rounded-2xl shadow-md">
         <form onSubmit={handleLogin} className="space-y-4 w-full">
-          {/* Heading */}
           <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
 
-          {/* Error Message */}
           {error && <p className="text-red-500 text-center">{error}</p>}
 
-          {/* Email Field */}
           <div>
             <label className="block text-sm font-semibold text-gray-600">Email</label>
             <input
@@ -54,7 +52,6 @@ function LoginPage() {
             />
           </div>
 
-          {/* Password Field */}
           <div>
             <label className="block text-sm font-semibold text-gray-600">Password</label>
             <input
@@ -67,7 +64,6 @@ function LoginPage() {
             />
           </div>
 
-          {/* Login Button */}
           <button
             type="submit"
             disabled={isLoading}
@@ -76,7 +72,6 @@ function LoginPage() {
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
 
-          {/* Footer Link */}
           <p className="text-sm text-center pt-2">
             Don't have an account?{' '}
             <Link to="/register" className="text-blue-600 font-semibold hover:underline">
