@@ -47,18 +47,44 @@ const Dashboard = () => {
   };
 
   const fetchRecommendations = async () => {
-    // Prepare data for Gemini API including watch history
-    const requestData = {
-      type: selectedType,
-      genre: selectedGenre,
-      preferences: userPreferences,
-      watchHistory: watchHistory,
-      timestamp: new Date().toISOString()
-    };
+    try {
+      // Prepare data for Gemini API including watch history
+      const requestData = {
+        type: selectedType,
+        genre: selectedGenre,
+        preferences: userPreferences,
+        watchHistory: watchHistory,
+        timestamp: new Date().toISOString()
+      };
 
-    console.log('Sending to Gemini:', requestData);
+      console.log('Sending to Gemini:', requestData);
 
-    // For now, using dummy data but structure is ready for Gemini integration
+      // Call the backend Gemini service
+      const response = await fetch('http://localhost:8000/api/recommendations/gemini', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Gemini recommendations received:', data);
+        setRecommendations(data);
+      } else {
+        console.error('Failed to fetch recommendations:', response.status);
+        // Fallback to dummy data if API fails
+        setRecommendations(getFallbackRecommendations());
+      }
+    } catch (error) {
+      console.error('Error fetching recommendations:', error);
+      // Fallback to dummy data if API fails
+      setRecommendations(getFallbackRecommendations());
+    }
+  };
+
+  const getFallbackRecommendations = () => {
     let dummyData = [];
     switch (selectedType) {
       case 'books':
@@ -99,7 +125,7 @@ const Dashboard = () => {
       ? dummyData.filter((item) => item.type === selectedGenre)
       : dummyData;
 
-    setRecommendations(filtered);
+    return filtered;
   };
 
   return (
