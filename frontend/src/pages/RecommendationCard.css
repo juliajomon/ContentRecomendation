@@ -1,4 +1,3 @@
-/* RecommendationCard.css */
 
 .recommendation-card {
   width: 280px;
@@ -35,4 +34,12 @@
 .recommendation-type {
   font-size: 14px;
   color: #7f8c8d;
+}
+
+.recommendations-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; 
+  gap: 20px;
+  padding: 20px;
 }
