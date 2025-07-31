@@ -13,7 +13,7 @@ function DashboardPage() {
         `http://localhost:8000/api/recommendations?category=${category}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setRecommendations(response.data); // Assuming the API returns an array
+      setRecommendations(response.data); 
     } catch (error) {
       console.error('Failed to fetch recommendations', error);
     }
