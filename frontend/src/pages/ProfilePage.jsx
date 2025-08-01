@@ -46,7 +46,7 @@ function ProfilePage() {
 
       setStatusMessage('Profile updated successfully!');
       setStatusType('success');
-      setPassword(''); // Clear password field after successful update
+      setPassword('');
     } catch (error) {
       console.error('Error updating profile:', error);
       setStatusMessage('Failed to update profile.');
