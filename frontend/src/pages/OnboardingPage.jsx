@@ -11,7 +11,6 @@ const OnboardingPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Sample data for initial selection and recommendations
   const initialItems = {
     movies: [
       { id: 1, title: 'The Dark Knight', genre: 'Action' },
@@ -56,11 +55,8 @@ const OnboardingPage = () => {
     const newLikedItems = [...likedItems, item];
     setLikedItems(newLikedItems);
     
-    // Simulate API call for recommendations
     setIsLoading(true);
     
-    // In a real app, this would call your API with the liked item
-    // For now, we'll simulate with similar items from our data
     setTimeout(() => {
       const similarItems = getSimilarItems(item, selectedCategory);
       setCurrentRecommendations(similarItems);
@@ -70,7 +66,6 @@ const OnboardingPage = () => {
 
   const getSimilarItems = (likedItem, category) => {
     const allItems = initialItems[category];
-    // Simple similarity based on genre
     return allItems
       .filter(item => 
         item.genre === likedItem.genre && 
@@ -81,14 +76,12 @@ const OnboardingPage = () => {
   };
 
   const handleSkipItem = (item) => {
-    // Remove from current recommendations
     setCurrentRecommendations(prev => 
       prev.filter(rec => rec.id !== item.id)
     );
   };
 
   const handleFinishOnboarding = () => {
-    // Save liked items to localStorage or send to backend
     localStorage.setItem('userLikes', JSON.stringify(likedItems));
     localStorage.setItem('onboardingComplete', 'true');
     navigate('/dashboard');
