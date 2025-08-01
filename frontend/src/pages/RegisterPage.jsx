@@ -43,7 +43,6 @@ const RegisterPage = () => {
       if (err.response?.data?.message) {
         setError(err.response.data.message);
       } else if (err.response?.data?.errors) {
-        // Handle validation errors
         const errorMessages = Object.values(err.response.data.errors).join(', ');
         setError(errorMessages);
       } else {
