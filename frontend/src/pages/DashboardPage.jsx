@@ -48,7 +48,6 @@ const Dashboard = () => {
 
   const fetchRecommendations = async () => {
     try {
-      // Prepare data for Gemini API including watch history
       const requestData = {
         type: selectedType,
         genre: selectedGenre,
@@ -59,7 +58,6 @@ const Dashboard = () => {
 
       console.log('Sending to Gemini:', requestData);
 
-      // Call the backend Gemini service
       const response = await fetch('http://localhost:8000/api/recommendations/gemini', {
         method: 'POST',
         headers: {
@@ -74,12 +72,10 @@ const Dashboard = () => {
         setRecommendations(data);
       } else {
         console.error('Failed to fetch recommendations:', response.status);
-        // Fallback to dummy data if API fails
         setRecommendations(getFallbackRecommendations());
       }
     } catch (error) {
       console.error('Error fetching recommendations:', error);
-      // Fallback to dummy data if API fails
       setRecommendations(getFallbackRecommendations());
     }
   };
