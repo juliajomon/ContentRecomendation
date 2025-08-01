@@ -25,7 +25,6 @@ function LoginPage() {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       
-      // Check if user has completed onboarding
       const onboardingComplete = localStorage.getItem('onboardingComplete');
       
       if (onboardingComplete === 'true') {
